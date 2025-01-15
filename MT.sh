@@ -13,6 +13,7 @@ declare -A FILES_TO_DOWNLOAD=(
     ["tools/1.sh"]="https://mifongjvav.github.io/tools/1.sh"           # 工具脚本
     ["tools/2.sh"]="https://mifongjvav.github.io/tools/2.sh"           # 工具脚本
     ["tools/3.sh"]="https://mifongjvav.github.io/tools/3.sh"           # 工具脚本
+    ["tools/UME.sh"]="https://mifongjvav.github.io/tools/UME.sh"           # 工具脚本
     ["tools/!AT.sh"]="https://mifongjvav.github.io/tools/!AT.sh"       # AT 工具脚本
     ["tools/!DFW.sh"]="https://mifongjvav.github.io/tools/!DFW.sh"     # DFW 工具脚本
     ["tools/!tools.txt"]="https://mifongjvav.github.io/tools/!tools.txt" # 工具列表文件
