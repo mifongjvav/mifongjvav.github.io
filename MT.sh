@@ -1,7 +1,79 @@
 #!/bin/bash
 
 # 脚本的远程 URL（用于自动更新）
-SCRIPT_URL="https://mifongjvav.github.io/MT.sh"
+SCRIPT_URL="https://mifongjvav.github.io/MT.s h"
+
+# 定义需要下载的文件列表
+declare -A FILES_TO_DOWNLOAD=(
+    ["lang/zh_cn.lang"]="https://mifongjvav.github.io/lang/zh_cn.lang"  # 语言文件
+    ["lang/zh_tw.lang"]="https://mifongjvav.github.io/lang/zh_tw.lang"  # 语言文件
+    ["lang/zh_hk.lang"]="https://mifongjvav.github.io/lang/zh_hk.lang"  # 语言文件
+    ["lang/en_us.lang"]="https://mifongjvav.github.io/lang/en_us.lang"  # 语言文件
+    ["lang/ja_jp.lang"]="https://mifongjvav.github.io/lang/ja_jp.lang"  # 语言文件
+    ["tools/1.sh"]="https://mifongjvav.github.io/tools/1.sh"           # 工具脚本
+    ["tools/2.sh"]="https://mifongjvav.github.io/tools/2.sh"           # 工具脚本
+    ["tools/3.sh"]="https://mifongjvav.github.io/tools/3.sh"           # 工具脚本
+    ["tools/!AT.sh"]="https://mifongjvav.github.io/tools/!AT.sh"       # AT 工具脚本
+    ["tools/!DFW.sh"]="https://mifongjvav.github.io/tools/!DFW.sh"     # DFW 工具脚本
+    ["tools/!tools.txt"]="https://mifongjvav.github.io/tools/!tools.txt" # 工具列表文件
+)
+
+# 自动更新脚本自身
+auto_update_self() {
+    echo "正在检查主程序更新..."
+    # 下载最新版本的脚本到临时文件
+    wget -q "$SCRIPT_URL" -O "MT.sh.tmp"
+    if [ $? -ne 0 ]; then
+        echo "错误: 无法下载最新版本的脚本。"
+        return 1
+    fi
+
+    # 比较当前脚本和下载的脚本是否相同
+    if ! cmp -s "MT.sh" "MT.sh.tmp"; then
+        echo "发现新版本，正在更新主程序..."
+        # 备份当前脚本
+        mv "MT.sh" "MT.sh.bak"
+        # 替换为最新版本
+        mv "MT.sh.tmp" "MT.sh"
+        chmod +x "MT.sh"  # 确保新脚本有执行权限
+        echo "主程序已更新，请重新运行。"
+        exit 0
+    else
+        echo "主程序已是最新版本，无需更新。"
+        rm -f "MT.sh.tmp"  # 删除临时文件
+    fi
+}
+
+# 自动更新工具脚本和语言文件
+auto_update_tools_and_lang() {
+    echo "正在检查工具脚本和语言文件更新..."
+    mkdir -p lang tools  # 确保 lang 和 tools 目录存在
+
+    for file_path in "${!FILES_TO_DOWNLOAD[@]}"; do
+        url="${FILES_TO_DOWNLOAD[$file_path]}"
+        # 只更新工具脚本和语言文件
+        if [[ "$file_path" == tools/* || "$file_path" == lang/* ]]; then
+            echo "检查 $file_path 更新..."
+            wget -q "$url" -O "$file_path.tmp"
+            if [ $? -eq 0 ]; then
+                # 比较当前文件和下载的文件是否相同
+                if ! cmp -s "$file_path" "$file_path.tmp"; then
+                    echo "发现新版本，正在更新 $file_path..."
+                    mv "$file_path.tmp" "$file_path"
+                    chmod +x "$file_path"  # 确保脚本有执行权限
+                else
+                    echo "$file_path 已是最新版本。"
+                    rm -f "$file_path.tmp"  # 删除临时文件
+                fi
+            else
+                echo "错误: 无法下载 $file_path。"
+                rm -f "$file_path.tmp"  # 删除临时文件
+            fi
+        fi
+    done
+
+    echo "工具脚本和语言文件更新完成。"
+}
 
 # 检查设置文件中是否存在 NTFT 字段
 check_ntft() {
@@ -43,48 +115,6 @@ ask_eula() {
         esac
     done
 }
-
-# 自动更新脚本
-auto_update() {
-    echo "正在检查脚本更新..."
-    # 下载最新版本的脚本到临时文件
-    wget -q "$SCRIPT_URL" -O "MT.sh.tmp"
-    if [ $? -ne 0 ]; then
-        echo "错误: 无法下载最新版本的脚本。"
-        return 1
-    fi
-
-    # 比较当前脚本和下载的脚本是否相同
-    if ! cmp -s "MT.sh" "MT.sh.tmp"; then
-        echo "发现新版本，正在更新..."
-        # 备份当前脚本
-        mv "MT.sh" "MT.sh.bak"
-        # 替换为最新版本
-        mv "MT.sh.tmp" "MT.sh"
-        chmod +x "MT.sh"  # 确保新脚本有执行权限
-        echo "脚本已更新，请重新运行。"
-        exit 0
-    else
-        echo "当前已是最新版本，无需更新。"
-        rm -f "MT.sh.tmp"  # 删除临时文件
-    fi
-}
-
-# 定义需要下载的文件列表
-declare -A FILES_TO_DOWNLOAD=(
-    ["lang/zh_cn.lang"]="https://mifongjvav.github.io/lang/zh_cn.lang"  # 语言文件
-    ["lang/zh_tw.lang"]="https://mifongjvav.github.io/lang/zh_tw.lang"  # 语言文件
-    ["lang/zh_hk.lang"]="https://mifongjvav.github.io/lang/zh_hk.lang"  # 语言文件
-    ["lang/en_us.lang"]="https://mifongjvav.github.io/lang/en_us.lang"  # 语言文件
-    ["lang/ja_jp.lang"]="https://mifongjvav.github.io/lang/ja_jp.lang"  # 语言文件
-    ["tools/1.sh"]="https://mifongjvav.github.io/tools/1.sh"           # 工具脚本
-    ["tools/2.sh"]="https://mifongjvav.github.io/tools/2.sh"           # 工具脚本
-    ["tools/3.sh"]="https://mifongjvav.github.io/tools/3.sh"           # 工具脚本
-    ["tools/UME.sh"]="https://mifongjvav.github.io/tools/UME.sh"           # 工具脚本
-    ["tools/!AT.sh"]="https://mifongjvav.github.io/tools/!AT.sh"       # AT 工具脚本
-    ["tools/!DFW.sh"]="https://mifongjvav.github.io/tools/!DFW.sh"     # DFW 工具脚本
-    ["tools/!tools.txt"]="https://mifongjvav.github.io/tools/!tools.txt" # 工具列表文件
-)
 
 # 首次启动时下载文件
 initialize_files() {
@@ -212,7 +242,12 @@ show_language_list() {
 }
 
 # 主逻辑
-auto_update  # 检查并更新脚本
+auto_update_self  # 检查并更新主程序
+
+# 只有在主程序未更新的情况下，才更新工具脚本和语言文件
+if [ $? -eq 0 ]; then
+    auto_update_tools_and_lang  # 检查并更新工具脚本和语言文件
+fi
 
 if ! check_ntft; then
     ask_eula  # 询问用户是否同意协议
