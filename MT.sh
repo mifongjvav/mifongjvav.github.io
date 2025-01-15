@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# 脚本的远程 URL（用于自动更新）
+SCRIPT_URL="https://mifongjvav.github.io/MT.sh"
+
 # 检查设置文件中是否存在 NTFT 字段
 check_ntft() {
     if [ -f "!SET.txt" ]; then
@@ -39,6 +42,32 @@ ask_eula() {
                 ;;
         esac
     done
+}
+
+# 自动更新脚本
+auto_update() {
+    echo "正在检查脚本更新..."
+    # 下载最新版本的脚本到临时文件
+    wget -q "$SCRIPT_URL" -O "MT.sh.tmp"
+    if [ $? -ne 0 ]; then
+        echo "错误: 无法下载最新版本的脚本。"
+        return 1
+    fi
+
+    # 比较当前脚本和下载的脚本是否相同
+    if ! cmp -s "MT.sh" "MT.sh.tmp"; then
+        echo "发现新版本，正在更新..."
+        # 备份当前脚本
+        mv "MT.sh" "MT.sh.bak"
+        # 替换为最新版本
+        mv "MT.sh.tmp" "MT.sh"
+        chmod +x "MT.sh"  # 确保新脚本有执行权限
+        echo "脚本已更新，请重新运行。"
+        exit 0
+    else
+        echo "当前已是最新版本，无需更新。"
+        rm -f "MT.sh.tmp"  # 删除临时文件
+    fi
 }
 
 # 定义需要下载的文件列表
@@ -183,6 +212,8 @@ show_language_list() {
 }
 
 # 主逻辑
+auto_update  # 检查并更新脚本
+
 if ! check_ntft; then
     ask_eula  # 询问用户是否同意协议
     initialize_files  # 下载支持库文件
