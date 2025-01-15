@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 脚本的远程 URL（用于自动更新）
-SCRIPT_URL="https://mifongjvav.github.io/MT.s h"
+SCRIPT_URL="https://mifongjvav.github.io/MT.sh"
 
 # 定义需要下载的文件列表
 declare -A FILES_TO_DOWNLOAD=(
