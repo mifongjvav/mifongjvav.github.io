@@ -1,0 +1,12 @@
+lang/zh_cn.lang=https://mifongjvav.github.io/lang/zh_cn.lang
+lang/zh_tw.lang=https://mifongjvav.github.io/lang/zh_tw.lang
+lang/zh_hk.lang=https://mifongjvav.github.io/lang/zh_hk.lang
+lang/en_us.lang=https://mifongjvav.github.io/lang/en_us.lang
+lang/ja_jp.lang=https://mifongjvav.github.io/lang/ja_jp.lang
+tools/1.sh=https://mifongjvav.github.io/tools/1.sh
+tools/2.sh=https://mifongjvav.github.io/tools/2.sh
+tools/3.sh=https://mifongjvav.github.io/tools/3.sh
+tools/UME.sh=https://mifongjvav.github.io/tools/UME.sh
+tools/!AT.sh=https://mifongjvav.github.io/tools/!AT.sh
+tools/!DFW.sh=https://mifongjvav.github.io/tools/!DFW.sh
+tools/!tools.txt=https://mifongjvav.github.io/tools/!tools.txt
