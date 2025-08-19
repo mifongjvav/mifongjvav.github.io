@@ -1,0 +1,12 @@
+{
+  "devDependencies": {
+    "vitepress": "2.0.0-alpha.11",    
+    "rimraf": "^6.0.1",
+    "cpr": "^3.0.1"
+  },
+  "scripts": {
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build && rimraf docs && cpr .vitepress/dist docs",
+    "docs:preview": "vitepress preview"
+  }
+}
